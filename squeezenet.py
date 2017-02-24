@@ -12,7 +12,11 @@ relu = "relu_"
 
 # Modular function for Fire Node
 
-def fire_module(x, fire_id, squeeze=16, expand=64, dim_ordering='tf'):
+def fire_module(x, fire_id, squeeze=16, expand=64, dim_ordering='default'):
+    if dim_ordering == 'default':
+        dim_ordering = K.image_dim_ordering()
+    assert dim_ordering in {'tf', 'th'}
+    
     s_id = 'fire' + str(fire_id) + '/'
     if dim_ordering is 'tf':
         c_axis = 3
@@ -34,7 +38,11 @@ def fire_module(x, fire_id, squeeze=16, expand=64, dim_ordering='tf'):
 
 # Original SqueezeNet from paper.
 
-def get_squeezenet(nb_classes, dim_ordering='tf'):
+def get_squeezenet(nb_classes, dim_ordering='default'):
+    if dim_ordering == 'default':
+        dim_ordering = K.image_dim_ordering()
+    assert dim_ordering in {'tf', 'th'}
+    
     if dim_ordering is 'th':
         input_img = Input(shape=(3, 227, 227))
     elif dim_ordering is 'tf':
